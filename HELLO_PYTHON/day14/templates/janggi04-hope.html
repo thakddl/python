@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+<style>
+	#ground {
+		position: relative;
+	}
+	#malContainer {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	#div_fak,
+	.mal {
+		position: absolute;
+	}
+
+</style>
+</head>
+<body>
+	<div id="ground">
+		<img id="pan" src="images/janggipan.png">
+		<div id="malContainer"></div>
+	</div>
+<script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="Tween.js"></script>
+<script type="text/javascript" src="Sequence.js"></script>
+<script type="text/javascript" src="Parallel.js"></script>
+<script>
+	let arr2D = [
+		 ["h_차", "h_마", "h_상", "h_사", "e", "h_사", "h_상", "h_마", "h_차"]
+		,["e", "e", "e", "e", "h_왕", "e", "e", "e", "e"]
+		,["e", "h_포", "e", "e", "e", "e", "e", "h_포", "e"]
+		,["h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸"]
+		,["e", "e", "e", "e", "e", "e", "e", "e", "e"]
+		,["e", "e", "e", "e", "e", "e", "e", "e", "e"]
+		,["c_졸", "e", "c_졸", "e", "c_졸", "e", "c_졸", "e", "c_졸"]
+		,["e", "c_포", "e", "e", "e", "e", "e", "c_포", "e"]
+		,["e", "e", "e", "e", "c_왕", "e", "e", "e", "e"]
+		,["c_차", "c_마", "c_상", "c_사", "e", "c_사", "c_상", "c_마", "c_차"]
+	];
+	var can2D = [
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+        
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+        [0,0,0,0,0, 0,0,0,0,],
+  	];
+	window.addEventListener('DOMContentLoaded', init);
+	function init(){
+		myMal();
+		myRender();
+		
+		let mals = document.getElementsByClassName('mal');
+		for(let i=0; i<mals.length; i++){		
+			mals[i].addEventListener('click', clickMal)
+		}
+	}
+	function myMal(){
+		let malCon = document.getElementById("malContainer");
+		let text = "";
+		for(let i=0; i<10; i++){			
+			for(let j=0; j<9; j++){			
+				text += "<img class='mal' id='"+i+","+j+"' style='top:"+(44*i)+"px; left:"+(52*j)+"px' src='images/e.png' title='"+i+","+j+"'>";
+			}
+		}
+		malCon.innerHTML=text;
+	}
+	function myRender(){
+		let mals = document.getElementsByClassName("mal");
+		for(let i=0; i<10; i++){			
+			for(let j=0; j<9; j++){
+				idx=(i*9)+j;
+				mals[idx].src='images/'+arr2D[i][j]+'.png';
+			}
+		}
+	}
+	
+	let statusIdx = 0;
+	let preIntI = -1;
+	let preIntJ = -1;
+	function clickMal(){
+		let status = statusIdx%4;
+		let strIj = this.title;
+		let arrIj = strIj.split(",");
+		let intI = parseInt(arrIj[0]);
+		let intJ = parseInt(arrIj[1]);
+		
+		let checkMal = arr2D[intI][intJ];
+		if(status==0 || status==2){
+			if(checkMal=='e'){
+				return;
+			} 
+		}
+		
+		if(status==0 && checkMal.indexOf('c')==-1){
+			alert("초의 차례입니다.");
+			return;
+		} 
+		else if(status==2 && checkMal.indexOf('h')==-1){
+			alert("한의 차례입니다.");
+			return;
+		}
+		
+		if(status==0 || status==2){		
+			preIntI = intI;
+			preIntJ = intJ;
+		} else {
+			let preMal = arr2D[preIntI][preIntJ];
+			
+			if(preMal==arr2D[intI][intJ]){				
+				return;
+			}
+			
+			arr2D[intI][intJ] = preMal;
+			arr2D[preIntI][preIntJ] = 'e';
+			myRender();
+			
+			let pre_x = preIntJ*52;
+			let pre_y = preIntI*44;
+			let move_x = intJ*52;
+			let move_y = intI*44;
+			
+			let mal = document.getElementsByClassName("mal")[intI*9+intJ];
+			var p = new Parallel();
+			p.addChild(new Tween(mal.style, 'left', Tween.regularEaseIn, pre_x, move_x, 1, 'px'));	
+			p.addChild(new Tween(mal.style, 'top', Tween.regularEaseIn, pre_y, move_y, 1, 'px'));
+			p.start();
+			
+			preIntI = -1;
+			preIntJ = -1;
+			
+		}
+		
+		statusIdx++;
+		
+	}
+	
+</script>
+</body>
+</html>

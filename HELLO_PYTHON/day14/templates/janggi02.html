@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+	#ground {
+		position: relative;
+	}
+	#malContainer {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.mal {
+		position: absolute;
+	}
+
+</style>
+</head>
+<body>
+	<div id="ground">
+		<img id="pan" src="images/janggipan.png">
+		<div id="malContainer"></div>
+	</div>
+<script>
+	let arr2D = [
+		 ["h_차", "h_마", "h_상", "h_사", "e", "h_사", "h_상", "h_마", "h_차"]
+		,["e", "e", "e", "e", "h_왕", "e", "e", "e", "e"]
+		,["e", "h_포", "e", "e", "e", "e", "e", "h_포", "e"]
+		,["h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸", "e", "h_졸"]
+		,["e", "e", "e", "e", "e", "e", "e", "e", "e"]
+		,["e", "e", "e", "e", "e", "e", "e", "e", "e"]
+		,["c_졸", "e", "c_졸", "e", "c_졸", "e", "c_졸", "e", "c_졸"]
+		,["e", "c_포", "e", "e", "e", "e", "e", "c_포", "e"]
+		,["e", "e", "e", "e", "c_왕", "e", "e", "e", "e"]
+		,["c_차", "c_마", "c_상", "c_사", "e", "c_사", "c_상", "c_마", "c_차"]
+	];
+	window.addEventListener('DOMContentLoaded', init);
+	function init(){
+		myMal();
+		myRender();
+		
+		let mals = document.getElementsByClassName('mal');
+		for(let i=0; i<mals.length; i++){		
+			mals[i].addEventListener('click', getTargetMal)
+		}
+	}
+	function myMal(){
+		let malCon = document.getElementById("malContainer");
+		let text = "";
+		for(let i=0; i<10; i++){			
+			for(let j=0; j<9; j++){			
+				text += "<img class='mal' style='top:"+(44*i)+"px; left:"+(52*j)+"px' src='images/e.png' title='"+i+","+j+"'>";
+			}
+		}
+		malCon.innerHTML=text;
+	}
+	function myRender(){
+		let mals = document.getElementsByClassName("mal");
+		for(let i=0; i<10; i++){			
+			for(let j=0; j<9; j++){
+				idx=(i*9)+j;
+				mals[idx].src='images/'+arr2D[i][j]+'.png';
+			}
+		}
+	}
+</script>
+</body>
+</html>

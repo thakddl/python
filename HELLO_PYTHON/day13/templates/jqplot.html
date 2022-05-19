@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>jqplot</title>
+<link class="include" rel="stylesheet" type="text/css" href="/jqplot/jquery.jqplot.min.css" />
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="../excanvas.js"></script><![endif]-->
+<script class="include" type="text/javascript" src="/jqplot/jquery.min.js"></script>
+<script class="include" type="text/javascript" src="/jqplot/jquery.jqplot.min.js"></script>
+<style type="text/css">
+.chart{
+	width:200px;
+	height:100px;
+}
+</style>
+<script>
+
+	function setTargetsIdByClass(className){
+		let targetClassList = document.getElementsByClassName(className);
+		for(let i=0;i<targetClassList.length;i++){
+			let idStr = className+i;
+			targetClassList[i].id = idStr;
+		}
+	}
+	function drawTable(dataCnt,colCnt,tableId,labelClass,targetClass){
+		dataCnt = dataCnt==null? 10:dataCnt;
+		colCnt = colCnt==null? 5:colCnt;
+		tableId = tableId==null? "table":tableId;
+		labelClass = labelClass==null? "label":labelClass;
+		targetClass = targetClass==null? "target":targetClass;
+		
+		let tableObj = document.getElementById(tableId);
+		let rowCnt = Math.ceil(dataCnt/colCnt);
+		let text = "";
+		for(let i=0;i<rowCnt;i++){
+				text += '<tr>';
+			for(let j=0;j<colCnt;j++){
+				text += `	<th class=${labelClass}>-</th>`;
+			}
+				text += '</tr>';
+				text += '<tr>';
+			for(let j=0;j<colCnt;j++){
+				text += `	<td><div class=${targetClass}></div></td>`;
+			}
+				text += '</tr>';	
+		}
+		
+		tableObj.innerHTML = text;
+	}
+
+	function drawChart(){
+		let dataArr = {{data|safe}};
+		let arrLen = dataArr.length;
+		let tableId = "myTable";
+		let labelClass = "s_name";
+		let targetClass = "chart";
+		
+		drawTable(arrLen,5,tableId,labelClass,targetClass);
+		setTargetsIdByClass(targetClass);
+		
+		let s_names = document.getElementsByClassName(labelClass);
+		
+		for(let i=0; i<arrLen; i++){
+			let tarName = dataArr[i][0];
+			let tarData = [dataArr[i][1]];
+			s_names[i].innerHTML = tarName;
+ 			$.jqplot ("chart"+i, tarData);
+		}
+	}
+	window.addEventListener('DOMContentLoaded', drawChart)
+</script>
+</head>
+<body>
+	<table id="myTable" border="1px"></table>
+</body>
+</html>

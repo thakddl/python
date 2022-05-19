@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tween Test</title>
+	<script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="Tween.js"></script>
+	<script type="text/javascript" src="Sequence.js"></script>
+	<script type="text/javascript" src="Parallel.js"></script>
+
+</head>
+<body>
+
+	<img src="images/h_왕.png" id="img1" style="position: relative; left: 0px;">
+	<input type="button" value="move" >
+	
+	<script type="text/javascript">
+	
+		let btn = document.querySelector("input[value=move]");
+		btn.addEventListener('click', parallel);
+		function move(){
+			let img1 = document.getElementById("img1");
+			let t = new Tween(img1.style, 'left', Tween.regularEaseOut, 0, 500, 0, 1, 'px');		
+			t.start()
+		}
+		function serial(){
+			let img1 = document.getElementById("img1");
+	
+			var seq = new Sequence();
+			seq.addChild(new Tween(img1.style, 'left', Tween.regularEaseOut, 0, 500, 1,'px'));
+			seq.addChild(new Tween(img1.style, 'top', Tween.regularEaseOut, 0, 500, 1,'px'));
+			seq.start();
+		}
+		function parallel(){
+			let img1 = document.getElementById("img1");
+			var p = new Parallel();
+			p.addChild(new Tween(img1.style, 'left', Tween.regularEaseIn, 0, 500, 1, 'px'));	
+			p.addChild(new Tween(img1.style, 'top', Tween.regularEaseIn, 0, 500, 1, 'px'));
+			p.start();
+		}
+
+
+	</script>
+</body>
+</html>

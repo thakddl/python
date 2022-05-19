@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+	#ground {
+		position: relative;
+	}
+	#malContainer {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.mal {
+		position: absolute;
+	}
+
+</style>
+</head>
+<body>
+	<div id="ground">
+		<img id="pan" src="images/janggipan.png">
+		<div id="malContainer"></div>
+	</div>
+<script>
+	window.addEventListener('DOMContentLoaded', init);
+	function init(){
+		setGame();
+	}
+	function setGame(){
+		let malCon = document.getElementById("malContainer");
+		let text = "";
+		for(let i=0; i<10; i++){			
+			for(let j=0; j<9; j++){			
+				text += "<img class='mal' style='top:"+(44*i)+"px; left:"+(52*j)+"px' src='images/b_cha.png'>";
+			}
+		}
+		
+		malCon.innerHTML=text;
+	}
+	
+</script>
+</body>
+</html>

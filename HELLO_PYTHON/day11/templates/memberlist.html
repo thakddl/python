@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>아이디</th>
+				<th>이름</th>
+				<th>전화번호</th>
+				<th>주소</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for member in list %}
+			<tr>
+				<td><a href="javascript:set('{{member.m_id}}','{{member.m_name}}','{{member.tel}}','{{member.addr}}');">{{member.m_id}}</a></td>
+				<td>{{member.m_name}}</td>
+				<td>{{member.tel}}</td>
+				<td>{{member.addr}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<hr>
+	<table>
+		<tbody>
+			<tr>
+				<td>아이디</td>
+				<td><input id="m_id" type="text"></td>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td><input id="m_name" type="text"></td>
+			</tr>
+			<tr>
+				<td>전화번호</td>
+				<td><input id="tel" type="text"></td>
+			</tr>
+			<tr>
+				<td>주소</td>
+				<td><input id="addr" type="text"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="button" onclick="myInsert()" value="추가">
+					<input type="button" onclick="myUpdate()" value="수정">
+					<input type="button" onclick="myDelete()" value="삭제">
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<script src="jquery-3.6.0.min.js"></script>
+	<script>
+		function set(m_id,m_name,tel,addr){
+/* 			var idInput = document.getElementById("m_id");
+			var nameInput = document.getElementById("m_name");
+			var telInput = document.getElementById("tel");
+			var addrInput = document.getElementById("addr");
+
+			idInput.value = m_id;
+			nameInput.value = m_name;
+			telInput.value = tel;
+			addrInput.value = addr; */
+
+			$("#m_id").val(m_id);
+			$("#m_name").val(m_name);
+			$("#tel").val(tel);
+			$("#addr").val(addr);
+		}
+				
+		function myInsert(){
+			var m_id = $("#m_id").val();
+			var m_name = $("#m_name").val();
+			var tel = $("#tel").val();
+			var addr = $("#addr").val();
+			
+			var postData = {
+				'm_id': m_id, 'm_name': m_name, 'tel': tel, 'addr':addr
+			}
+			
+			$.ajax({
+		    	type: 'POST',
+				url: 'myInsert',
+		        data: JSON.stringify(postData),
+		        dataType : 'JSON',
+		        contentType: "application/json",
+		        success: function(data){
+		        	if(data.result == "success"){	        		
+			        	alert("정상적으로 추가되었습니다.");
+			            location.reload();
+		        	}
+		        },
+		        error: function(request, status, error){
+		        	alert("통신 실패");
+		            console.log(request, status, error);
+		        }
+		     })
+		}
+		
+		function myUpdate(){
+			var m_id = $("#m_id").val();
+			var m_name = $("#m_name").val();
+			var tel = $("#tel").val();
+			var addr = $("#addr").val();
+			
+			var postData = {
+				'm_id': m_id, 'm_name': m_name, 'tel': tel, 'addr':addr
+			}
+			
+			$.ajax({
+		    	type: 'POST',
+				url: 'myUpdate',
+		        data: JSON.stringify(postData),
+		        dataType : 'JSON',
+		        contentType: "application/json",
+		        success: function(data){
+		        	if(data.result == "success"){	        		
+			        	alert("정상적으로 수정되었습니다.");
+			            location.reload();
+		        	}
+		        },
+		        error: function(request, status, error){
+		        	alert("통신 실패");
+		            console.log(request, status, error);
+		        }
+		     })
+		}
+		
+		function myDelete(){
+			var flag = confirm("정말 삭제하시겠습니까?");
+			if(!flag){
+				return;
+			}
+			var m_id = $("#m_id").val();
+			
+			var postData = {
+				'm_id': m_id
+			}
+			
+			$.ajax({
+		    	type: 'POST',
+				url: 'myDelete',
+		        data: JSON.stringify(postData),
+		        dataType : 'JSON',
+		        contentType: "application/json",
+		        success: function(data){
+		        	if(data.result == "success"){	        		
+			        	alert("정상적으로 삭제되었습니다.");
+			            location.reload();
+		        	}
+		        },
+		        error: function(request, status, error){
+		        	alert("통신 실패");
+		            console.log(request, status, error);
+		        }
+		     })
+		}
+	</script>
+</body>
+</html>

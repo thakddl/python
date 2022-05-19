@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jqplot</title>
+<link class="include" rel="stylesheet" type="text/css" href="/jqplot/jquery.jqplot.min.css" />
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="../excanvas.js"></script><![endif]-->
+<script class="include" type="text/javascript" src="/jqplot/jquery.min.js"></script>
+<script class="include" type="text/javascript" src="/jqplot/jquery.jqplot.min.js"></script>
+<style type="text/css">
+.chart{
+	width:300px;
+	height:300px;
+}
+</style>
+<script>
+	function set_html_values(){
+		var s_names = document.getElementsByClassName("s_name");
+		var chart = document.getElementsByClassName("chart");
+		for(var i=0;i<nameArr.length;i++){
+			var idStr = "chart"+i;
+			chart[i].id = idStr;
+			idArr.push(idStr);
+			s_names[i].innerHTML = nameArr[i];
+		}
+	}
+	function drawTable(){
+		var cnt = 5;
+		var colCnt = Math.ceil(nameArr.length/cnt);
+		var text = "";
+		
+		for(i=0;i<colCnt;i++){
+			text += `
+					<tr>
+						<th class="s_name">-</th>
+						<th class="s_name">-</th>
+						<th class="s_name">-</th>
+						<th class="s_name">-</th>
+						<th class="s_name">-</th>
+					</tr>
+					<tr>
+						<td><div class="chart"></div></td>
+						<td><div class="chart"></div></td>
+						<td><div class="chart"></div></td>
+						<td><div class="chart"></div></td>
+						<td><div class="chart"></div></td>
+					</tr>
+			`;	
+		}
+		var obj_mytable = document.getElementById('myTable');
+		
+		obj_mytable.innerHTML = text;
+	}
+	
+	var nameArr = [];
+	var idArr = [];
+	
+	$(document).ready(function(){
+		{% for s_name in a %}
+			nameArr.push('{{s_name}}');
+		{% endfor %}
+		drawTable();
+		set_html_values();
+		
+		var priceArr = [];
+		{% for p in b %}
+			priceArr.push([{{p}}]);
+		{% endfor %}
+		
+		for(i=0;i<nameArr.length;i++){
+ 			$.jqplot (idArr[i], priceArr[i]);
+		}
+		
+	});
+</script>
+</head>
+<body>
+<table id="myTable" border="1px"></table>
+	
+</body>
+</html>

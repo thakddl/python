@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+My name is {{name}}!<br>
+{%for a in list%}
+	{{a}}<br>
+{%endfor%}
+<br>
+--------dict--------<br>
+{{c.e_id}}
+{{c.e_name}}
+{{c.sex}}
+{{c.age}}<br>
+<br>
+--------arr dict--------<br>
+{%for entry in d%}
+	{{entry.e_id}}
+	{{entry.e_name}}
+	{{entry.sex}}
+	{{entry.age}}<br>
+{%endfor%}
+<br>
+
+</body>
+</html>
